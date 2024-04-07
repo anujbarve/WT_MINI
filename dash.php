@@ -11,31 +11,17 @@ if (!isset($_SESSION["UserID"])) {
 // Include database connection file
 include_once "./backend/db.php";
 
-// Retrieve user's room ID from session
-$roomID = $_SESSION["RoomID"];
-
-// Retrieve user's todos from the database based on the room ID
-$stmt = $conn->prepare("SELECT TodoID, Title, Description, Status FROM Todos WHERE RoomID = ?");
-$stmt->bind_param("i", $roomID);
+// Retrieve user's todos from the database
+$userID = $_SESSION["UserID"];
+$stmt = $conn->prepare("SELECT TodoID, Title, Description, Status FROM Todos WHERE CreatorID = ?");
+$stmt->bind_param("i", $userID);
 $stmt->execute();
 $result = $stmt->get_result();
-
-// Retrieve users accessing the shared todo list
-$stmt_users = $conn->prepare("SELECT DISTINCT u.Username FROM Users u JOIN Todos t ON u.RoomID = t.RoomID WHERE t.RoomID = ?");
-$stmt_users->bind_param("i", $roomID);
-$stmt_users->execute();
-$result_users = $stmt_users->get_result();
 
 // Initialize an array to store todos
 $todos = [];
 while ($row = $result->fetch_assoc()) {
     $todos[] = $row;
-}
-
-// Initialize an array to store users accessing the shared todo list
-$users = [];
-while ($row_user = $result_users->fetch_assoc()) {
-    $users[] = $row_user["Username"];
 }
 
 // Handle form submissions (e.g., adding or updating todos)
@@ -45,8 +31,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $title = $_POST["title"];
         $description = $_POST["description"];
         // Insert the new todo into the database
-        $stmt = $conn->prepare("INSERT INTO Todos (Title, Description, Status, CreatorID, RoomID) VALUES (?, ?, 'pending', ?, ?)");
-        $stmt->bind_param("ssii", $title, $description, $_SESSION["UserID"], $roomID);
+        $stmt = $conn->prepare("INSERT INTO Todos (Title, Description, Status, CreatorID) VALUES (?, ?, 'pending', ?)");
+        $stmt->bind_param("ssi", $title, $description, $userID);
         $stmt->execute();
         // Redirect back to index page after adding todo
         header("Location: index.php");
@@ -91,40 +77,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="#">
-            Todo List
-        </a>
-    </div>
-    <div class="navbar-menu">
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <?php if (isset($_SESSION["UserID"])): ?>
-                    <div class="buttons">
-                        <a class="button is-light" href="#">Welcome <?php echo $_SESSION["Username"]; ?></a>
-                        <a class="button is-light" href="logout.php">Logout</a>
-                    </div>
-                <?php else: ?>
-                    <div class="buttons">
-                        <a class="button is-primary" href="login.php">Log in</a>
-                        <a class="button is-light" href="register.html">Register</a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-</nav>
-
 <section class="section">
     <div class="container">
         <h1 class="title">Todo List</h1>
-
-        <!-- Display Room ID -->
-        <p>Room ID: <?php echo $roomID; ?></p>
-        
-        <!-- Display Users Accessing the Shared Todo List -->
-        <p>Users accessing this shared todo list: <?php echo implode(", ", $users); ?></p>
         
         <!-- Add Todo Form -->
         <div class="box">
@@ -179,14 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     </div>
 </section>
-
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>
-            <strong>Todo List</strong> by Your Name.
-        </p>
-    </div>
-</footer>
 
 </body>
 </html>
