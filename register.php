@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Shared Todos</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/vendor/bulma/css/bulma.min.css">
+    <script src="./main.js"></script>
 </head>
 <body>
+<?php
 
-<section class="section">
+include './modules/navbar.php';
+
+?>
+<section class="section is-medium">
     <div class="container">
-        <h1 class="title">Register for Shared Todos</h1>
+        <h1 class="title">Register to Study Tracker</h1>
 
         <div class="columns is-centered">
             <div class="column is-one-third">
@@ -30,7 +35,7 @@
                         </div>
                         <div class="field">
                             <div class="control">
-                                <button class="button is-success" type="submit">Register</button>
+                                <button class="button is-primary" type="submit">Register</button>
                             </div>
                         </div>
                     </form>
@@ -40,6 +45,10 @@
 
     </div>
 </section>
+<?php
 
+include './modules/footer.php';
+
+?>
 </body>
 </html>

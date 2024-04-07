@@ -1,4 +1,4 @@
-<nav class="navbar is-light" role="navigation" aria-label="main navigation">
+<nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="index.php">
             Study Tracker
@@ -12,15 +12,13 @@
     </div>
 
     <div id="navbarBasicExample" class="navbar-menu">
+    <?php if (isset($_SESSION["UserID"])) : ?>
         <div class="navbar-start">
-            <a class="navbar-item" href="dashboard.php">
-                Dashboard
-            </a>
-
-            <a class="navbar-item" href="join.php">
-                Join
+        <a class="navbar-item" href="rooms.php">
+                Rooms
             </a>
         </div>
+    <?php endif ?>
 
 
 
