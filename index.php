@@ -38,47 +38,6 @@ while ($row_user = $result_users->fetch_assoc()) {
     $users[] = $row_user["Username"];
 }
 
-// Handle form submissions (e.g., adding or updating todos)
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Check if the action is to add a new todo
-    if (isset($_POST["add_todo"])) {
-        $title = $_POST["title"];
-        $description = $_POST["description"];
-        // Insert the new todo into the database
-        $stmt = $conn->prepare("INSERT INTO Todos (Title, Description, Status, CreatorID, RoomID) VALUES (?, ?, 'pending', ?, ?)");
-        $stmt->bind_param("ssii", $title, $description, $_SESSION["UserID"], $roomID);
-        $stmt->execute();
-        // Redirect back to index page after adding todo
-        header("Location: index.php");
-        exit();
-    }
-
-    // Check if the action is to mark a todo as done
-    if (isset($_POST["mark_done"]) && isset($_POST["todo_id"])) {
-        $todoID = $_POST["todo_id"];
-        // Update the status of the todo to "completed" in the database
-        $stmt = $conn->prepare("UPDATE Todos SET Status = 'completed' WHERE TodoID = ?");
-        $stmt->bind_param("i", $todoID);
-        $stmt->execute();
-        // Redirect back to index page after marking todo as done
-        header("Location: index.php");
-        exit();
-    }
-
-    // Check if the action is to delete a todo
-    if (isset($_POST["delete"]) && isset($_POST["todo_id"])) {
-        $todoID = $_POST["todo_id"];
-        // Delete the todo from the database
-        $stmt = $conn->prepare("DELETE FROM Todos WHERE TodoID = ?");
-        $stmt->bind_param("i", $todoID);
-        $stmt->execute();
-        // Redirect back to index page after deleting todo
-        header("Location: index.php");
-        exit();
-    }
-
-    // Add more logic for handling other form submissions here
-}
 
 ?>
 <!DOCTYPE html>
@@ -91,30 +50,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="#">
-            Todo List
-        </a>
-    </div>
-    <div class="navbar-menu">
-        <div class="navbar-end">
-            <div class="navbar-item">
-                <?php if (isset($_SESSION["UserID"])): ?>
-                    <div class="buttons">
-                        <a class="button is-light" href="#">Welcome <?php echo $_SESSION["Username"]; ?></a>
-                        <a class="button is-light" href="logout.php">Logout</a>
-                    </div>
-                <?php else: ?>
-                    <div class="buttons">
-                        <a class="button is-primary" href="login.php">Log in</a>
-                        <a class="button is-light" href="register.html">Register</a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-</nav>
+<?php
+
+include './modules/navbar.php';
+
+?>
 
 <section class="section">
     <div class="container">
@@ -160,12 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p><strong>Description:</strong> <?php echo $todo["Description"]; ?></p>
                 <p><strong>Status:</strong> <?php echo $todo["Status"]; ?></p>
                 <!-- Form for marking todo as done -->
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="display: inline;">
+                <form action="./backend/dashboard_controller.php" method="post" style="display: inline;">
                     <input type="hidden" name="todo_id" value="<?php echo $todo["TodoID"]; ?>">
                     <button class="button is-success is-small" type="submit" name="mark_done">Mark as Done</button>
                 </form>
                 <!-- Form for deleting todo -->
-                <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="display: inline;">
+                <form action="./backend/dashboard_controller.php" method="post" style="display: inline;">
                     <input type="hidden" name="todo_id" value="<?php echo $todo["TodoID"]; ?>">
                     <button class="button is-danger is-small" type="submit" name="delete">Delete</button>
                 </form>
@@ -180,13 +120,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </section>
 
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>
-            <strong>Todo List</strong> by Your Name.
-        </p>
-    </div>
-</footer>
+<?php
+
+include './modules/footer.php';
+
+?>
 
 </body>
 </html>

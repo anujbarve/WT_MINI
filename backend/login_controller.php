@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["UserID"] = $user["UserID"];
         $_SESSION["Username"] = $user["Username"];
         $_SESSION["RoomID"] = $user["RoomID"];
+        $_SESSION["MyRoomID"] = $user["RoomID"];
 
         // Redirect to main page or dashboard
         header("Location: ../index.php");
