@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Apr 07, 2024 at 08:53 AM
+-- Generation Time: Apr 07, 2024 at 01:57 PM
 -- Server version: 8.3.0
 -- PHP Version: 8.2.8
 
@@ -24,41 +24,22 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ListMembers`
+-- Table structure for table `RoomUsers`
 --
 
-CREATE TABLE `ListMembers` (
-  `MemberID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
-  `ListID` int DEFAULT NULL
+CREATE TABLE `RoomUsers` (
+  `UserID` int NOT NULL,
+  `RoomID` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `ListTodos`
+-- Dumping data for table `RoomUsers`
 --
 
-CREATE TABLE `ListTodos` (
-  `ListTodoID` int NOT NULL,
-  `ListID` int DEFAULT NULL,
-  `TodoID` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `SharedLists`
---
-
-CREATE TABLE `SharedLists` (
-  `ListID` int NOT NULL,
-  `RoomID` varchar(50) NOT NULL,
-  `Title` varchar(100) NOT NULL,
-  `Description` text,
-  `CreatorID` int DEFAULT NULL,
-  `CreatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+INSERT INTO `RoomUsers` (`UserID`, `RoomID`) VALUES
+(1, 396617),
+(2, 396617),
+(3, 396617);
 
 -- --------------------------------------------------------
 
@@ -82,9 +63,9 @@ CREATE TABLE `Todos` (
 --
 
 INSERT INTO `Todos` (`TodoID`, `Title`, `Description`, `Status`, `CreatorID`, `CreatedAt`, `UpdatedAt`, `RoomID`) VALUES
-(1, 'New Todo', 'New NOW', 'completed', 3, '2024-04-07 08:06:31', '2024-04-07 08:06:36', 0),
-(2, 'Nova Todo', 'Nova Descriptino\r\n', 'completed', 5, '2024-04-07 08:17:11', '2024-04-07 08:17:17', 517640),
-(3, 'Anno Todo', 'Anno Todo', 'pending', 4, '2024-04-07 08:17:39', '2024-04-07 08:17:39', 517640);
+(5, 'Complete WT Practicals', 'Complete WT Practicals', 'completed', 2, '2024-04-07 12:48:54', '2024-04-07 13:28:11', 506082),
+(6, 'Complete Mini Project', 'Complete it asap', 'completed', 1, '2024-04-07 12:49:31', '2024-04-07 13:28:13', 506082),
+(10, 'Study this by vishal', 'Study this by vishal', 'pending', 3, '2024-04-07 13:53:46', '2024-04-07 13:53:46', 396617);
 
 -- --------------------------------------------------------
 
@@ -104,47 +85,19 @@ CREATE TABLE `Users` (
 --
 
 INSERT INTO `Users` (`UserID`, `Username`, `Password`, `RoomID`) VALUES
-(4, 'anno', '$2y$10$sAvdF7jOmhqTbaL0rRRdjuqCSBNYcbJkyPJ6toE3f5qmBrOfG/DzK', 622176),
-(5, 'nova', '$2y$10$KcoVsFHvafKHX8E9IP.4H.wByzJh9jBhMaw5bAD4g4meMP5scclQy', 517640);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `UserTodos`
---
-
-CREATE TABLE `UserTodos` (
-  `UserTodoID` int NOT NULL,
-  `UserID` int DEFAULT NULL,
-  `TodoID` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+(1, 'anuj', '$2y$10$6vDmu6phq3uBZrZ09IDZ/eXLATYEe.RzAwDAamTMET/OTWuoSUxWa', 396617),
+(2, 'pratik', '$2y$10$LWnoYA/6wcKhsG0ExY8mQuINii2E4EwCwU20K8XkzGThhwW6k37l6', 506082),
+(3, 'vishal', '$2y$10$9ZKQeXVmITLMhW5VfL7COu5TiRI9SCTtWWq4Tgf8M/PWoQ6p5NPOu', 112693);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `ListMembers`
+-- Indexes for table `RoomUsers`
 --
-ALTER TABLE `ListMembers`
-  ADD PRIMARY KEY (`MemberID`),
-  ADD UNIQUE KEY `UserID` (`UserID`,`ListID`),
-  ADD KEY `ListID` (`ListID`);
-
---
--- Indexes for table `ListTodos`
---
-ALTER TABLE `ListTodos`
-  ADD PRIMARY KEY (`ListTodoID`),
-  ADD UNIQUE KEY `ListID` (`ListID`,`TodoID`),
-  ADD KEY `TodoID` (`TodoID`);
-
---
--- Indexes for table `SharedLists`
---
-ALTER TABLE `SharedLists`
-  ADD PRIMARY KEY (`ListID`),
-  ADD UNIQUE KEY `RoomID` (`RoomID`);
+ALTER TABLE `RoomUsers`
+  ADD PRIMARY KEY (`UserID`,`RoomID`);
 
 --
 -- Indexes for table `Todos`
@@ -160,77 +113,20 @@ ALTER TABLE `Users`
   ADD UNIQUE KEY `Username` (`Username`);
 
 --
--- Indexes for table `UserTodos`
---
-ALTER TABLE `UserTodos`
-  ADD PRIMARY KEY (`UserTodoID`),
-  ADD UNIQUE KEY `UserID` (`UserID`,`TodoID`),
-  ADD KEY `TodoID` (`TodoID`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `ListMembers`
---
-ALTER TABLE `ListMembers`
-  MODIFY `MemberID` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `ListTodos`
---
-ALTER TABLE `ListTodos`
-  MODIFY `ListTodoID` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `SharedLists`
---
-ALTER TABLE `SharedLists`
-  MODIFY `ListID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `Todos`
 --
 ALTER TABLE `Todos`
-  MODIFY `TodoID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `TodoID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `UserID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `UserTodos`
---
-ALTER TABLE `UserTodos`
-  MODIFY `UserTodoID` int NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `ListMembers`
---
-ALTER TABLE `ListMembers`
-  ADD CONSTRAINT `ListMembers_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`),
-  ADD CONSTRAINT `ListMembers_ibfk_2` FOREIGN KEY (`ListID`) REFERENCES `SharedLists` (`ListID`);
-
---
--- Constraints for table `ListTodos`
---
-ALTER TABLE `ListTodos`
-  ADD CONSTRAINT `ListTodos_ibfk_1` FOREIGN KEY (`ListID`) REFERENCES `SharedLists` (`ListID`),
-  ADD CONSTRAINT `ListTodos_ibfk_2` FOREIGN KEY (`TodoID`) REFERENCES `Todos` (`TodoID`);
-
---
--- Constraints for table `UserTodos`
---
-ALTER TABLE `UserTodos`
-  ADD CONSTRAINT `UserTodos_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`),
-  ADD CONSTRAINT `UserTodos_ibfk_2` FOREIGN KEY (`TodoID`) REFERENCES `Todos` (`TodoID`);
+  MODIFY `UserID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
