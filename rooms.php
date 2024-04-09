@@ -30,7 +30,8 @@ while ($row = $result->fetch_assoc()) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registered Users</title>
-    <link rel="stylesheet" href="./assets/vendor/bulma/css/bulma.min.css">
+    <!-- <link rel="stylesheet" href="./assets/vendor/bulma/css/bulma.min.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css">
     <script src="./main.js"></script>
 </head>
 
